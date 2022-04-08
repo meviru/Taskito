@@ -1,5 +1,9 @@
 .c-toolbar {
     padding: 0 15px;
+    --background: transparent;
+    &__bg-white {
+        --background: var(--white);
+    }
     ion-avatar {
         width: 35px;
         height: 35px;

@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <topbar :toolbar-title="toolbarTitle" />
+      <topbar :toolbar-title="toolbarTitle" :is-bg-white="true" />
       <div class="chart-wrapper">
         <Doughnut
           :css-classes="cssClasses"

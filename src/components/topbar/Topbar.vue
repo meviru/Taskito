@@ -1,5 +1,9 @@
 <template>
-  <ion-toolbar class="c-toolbar" mode="md">
+  <ion-toolbar
+    class="c-toolbar"
+    :class="{ 'c-toolbar__bg-white': isBgWhite }"
+    mode="md"
+  >
     <ion-title>{{ toolbarTitle }}</ion-title>
     <ion-avatar slot="end">
       <img src="@/assets/images/user.jpg" alt="User" />
@@ -12,6 +16,6 @@ import { defineComponent } from "vue";
 import { Constants } from "@/constants/index";
 export default defineComponent({
   name: Constants.COMPONENT.TOPBAR,
-  props: ["toolbarTitle"],
+  props: ["toolbarTitle", "isBgWhite"],
 });
 </script>
