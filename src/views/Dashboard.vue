@@ -1,12 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
-      <ion-toolbar class="c-toolbar" mode="md">
-        <ion-title>Dashboard</ion-title>
-        <ion-avatar slot="end">
-          <img src="@/assets/images/user.jpg" alt="User" />
-        </ion-avatar>
-      </ion-toolbar>
+      <topbar :toolbar-title="toolbarTitle" />
       <div class="chart-wrapper">
         <Doughnut
           :css-classes="cssClasses"
@@ -14,6 +9,7 @@
           :chart-data="chartData"
           :chart-options="chartOptions"
           :styles="styles"
+          :plugins="plugins"
         />
       </div>
       <div class="wrapper">
@@ -120,18 +116,19 @@ import {
   ArcElement,
   CategoryScale,
 } from "chart.js";
+import Topbar from "@/components/topbar/Topbar.vue";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 export default defineComponent({
   name: Constants.NAME.DASHBOARD_TAB,
-  components: { IonContent, IonPage, Doughnut },
+  components: { IonContent, IonPage, Doughnut, Topbar },
   setup() {
     // Chart integration
     const chartData = {
       datasets: [
         {
-          backgroundColor: ["#f26950", "#5a55ca", "#2bc09c", "#afb5c0"],
-          data: [15, 13, 28, 44],
+          backgroundColor: ["#5a55ca", "#2bc09c", "#f26950", "#ffab58"],
+          data: [10, 40, 20, 30],
         },
       ],
     };
@@ -139,6 +136,12 @@ export default defineComponent({
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
+      animation: {
+        animateRotate: true,
+      },
+      hoverOffset: 4,
+      hoverBorderWidth: 0,
+      plugins: {},
     };
 
     const delayCount: any = stagger(0.1);
@@ -176,6 +179,7 @@ export default defineComponent({
     });
 
     return {
+      toolbarTitle: "Dashboard",
       // Ionicons
       folderOutline,
       checkmarkDoneOutline,

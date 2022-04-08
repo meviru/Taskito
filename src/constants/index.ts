@@ -6,6 +6,9 @@ const Constants = {
         TASK_TAB: "TaskTab",
         TABS_PAGE: "TabsPage",
     },
+    COMPONENT: {
+        TOPBAR: "TopbarComponent"
+    },
     API_URL: {
         TODOS: "todos"
     }
