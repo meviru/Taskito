@@ -1,0 +1,7 @@
+{
+  "name": "Taskito",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

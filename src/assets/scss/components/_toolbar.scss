@@ -1,0 +1,12 @@
+.c-toolbar {
+    padding: 0 15px;
+    ion-avatar {
+        width: 35px;
+        height: 35px;
+    }
+    ion-title {
+        padding: 0;
+        font-weight: bold;
+        color: $text-color-primary;
+    }
+}
