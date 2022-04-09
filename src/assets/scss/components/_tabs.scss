@@ -20,11 +20,11 @@ ion-tab-bar {
     }
 }
 ion-tab-button {
-    --background: var(--primary);
-    --color: var(--white);
-    --ripple-color: var(--white);
-    --color-selected: var(--white);
-    --background-focused: var(--primary);
+    --background: #{$primary};
+    --color: #{$white};
+    --ripple-color: #{$white};
+    --color-selected: #{$white};
+    --background-focused: #{$primary};
     ion-icon {
         opacity: 0.2;
         font-size: $font-size-base * 1.3;

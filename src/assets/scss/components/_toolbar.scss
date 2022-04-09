@@ -1,16 +1,28 @@
 .c-toolbar {
-    padding: 0 15px;
-    --background: transparent;
-    &__bg-white {
-        --background: var(--white);
+  padding: 0 15px;
+  --min-height: 70px;
+  --background: transparent;
+  &__bg-white {
+    --background: var(--white);
+  }
+  ion-avatar {
+    width: 35px;
+    height: 35px;
+  }
+  ion-title {
+    padding: 0;
+    font-weight: bold;
+    color: $text-color-primary;
+  }
+}
+
+.c-topbar-bottom {
+  padding: 0 15px;
+  &__date {
+    color: $gray;
+    font-size: $font-size-base * 0.85;
+    & + strong {
+      font-size: $font-size-base * 1.1;
     }
-    ion-avatar {
-        width: 35px;
-        height: 35px;
-    }
-    ion-title {
-        padding: 0;
-        font-weight: bold;
-        color: $text-color-primary;
-    }
+  }
 }

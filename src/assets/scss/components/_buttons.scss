@@ -1,0 +1,13 @@
+.button {
+  --border-radius: 10px;
+  --box-shadow: none;
+  height: 42px;
+  margin: 0;
+  text-transform: unset;
+  letter-spacing: normal;
+  @each $color, $value in $theme-colors {
+    &.ion-color-#{$color} {
+      --ion-color-base: #{$value} !important;
+    }
+  }
+}

@@ -13,7 +13,7 @@
         --padding-bottom: 8px;
         --padding-start: 12px;
         --padding-end: 12px;
-        --background: var(--white);
+        --background: #{$white};
         --inner-padding-end: 5px;
         overflow: visible;
         font-size: $font-size-base * 0.85;
