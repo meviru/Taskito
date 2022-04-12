@@ -22,7 +22,7 @@
               <ion-icon :icon="folderOutline" />
             </ion-avatar>
             <ion-label>Total Task</ion-label>
-            <ion-label slot="end">100</ion-label>
+            <ion-label class="text-muted" slot="end">100</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -37,7 +37,7 @@
               <ion-icon :icon="checkmarkDoneOutline" />
             </ion-avatar>
             <ion-label>Completed</ion-label>
-            <ion-label slot="end">10</ion-label>
+            <ion-label class="text-muted" slot="end">10</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -52,7 +52,7 @@
               <ion-icon :icon="repeatOutline" />
             </ion-avatar>
             <ion-label>In Progress</ion-label>
-            <ion-label slot="end">40</ion-label>
+            <ion-label class="text-muted" slot="end">40</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -67,7 +67,7 @@
               <ion-icon :icon="addOutline" />
             </ion-avatar>
             <ion-label>Pending</ion-label>
-            <ion-label slot="end">20</ion-label>
+            <ion-label class="text-muted" slot="end">20</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -82,7 +82,7 @@
               <ion-icon :icon="pauseOutline" />
             </ion-avatar>
             <ion-label>On Hold</ion-label>
-            <ion-label slot="end">30</ion-label>
+            <ion-label class="text-muted" slot="end">30</ion-label>
           </ion-item>
         </ion-list>
       </div>

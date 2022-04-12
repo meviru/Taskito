@@ -1,7 +1,7 @@
 <template>
   <ion-toolbar
-    class="c-toolbar"
-    :class="{ 'c-toolbar__bg-white': isBgWhite }"
+    class="c-topbar"
+    :class="{ 'c-topbar__bg-white': isBgWhite }"
     mode="md"
   >
     <ion-title>{{ toolbarTitle }}</ion-title>

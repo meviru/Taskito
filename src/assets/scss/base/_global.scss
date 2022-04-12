@@ -11,7 +11,13 @@ ion-content {
 .wrapper {
   padding: 15px;
 }
+.screen-wrapper {
+  padding: 0 15px;
+}
 
+.d-block {
+  display: block;
+}
 .d-flex {
   display: flex;
 }
@@ -83,4 +89,7 @@ ion-content {
 }
 .align-content-stretch {
   align-content: stretch;
+}
+.flex-grow-1 {
+  flex-grow: 1;
 }

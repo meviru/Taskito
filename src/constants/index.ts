@@ -7,7 +7,8 @@ const Constants = {
         TABS_PAGE: "TabsPage",
     },
     COMPONENT: {
-        TOPBAR: "TopbarComponent"
+        TOPBAR: "TopbarComponent",
+        CARD: "CardComponent"
     },
     API_URL: {
         TODOS: "todos"

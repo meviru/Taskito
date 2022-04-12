@@ -1,9 +1,9 @@
-.c-toolbar {
+.c-topbar {
   padding: 0 15px;
   --min-height: 70px;
   --background: transparent;
   &__bg-white {
-    --background: var(--white);
+    --background: #{$white};
   }
   ion-avatar {
     width: 35px;
@@ -17,12 +17,12 @@
 }
 
 .c-topbar-bottom {
-  padding: 0 15px;
+  margin: 10px 0 0;
   &__date {
-    color: $gray;
     font-size: $font-size-base * 0.85;
     & + strong {
-      font-size: $font-size-base * 1.1;
+      font-size: $font-size-base * 1.2;
+      line-height: 1;
     }
   }
 }

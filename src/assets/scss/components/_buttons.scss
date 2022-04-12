@@ -1,8 +1,9 @@
 .button {
   --border-radius: 10px;
   --box-shadow: none;
-  height: 42px;
+  height: 40px;
   margin: 0;
+  font-size: $font-size-base * 0.75;
   text-transform: unset;
   letter-spacing: normal;
   @each $color, $value in $theme-colors {

@@ -1,0 +1,21 @@
+.text-muted {
+    color: $gray !important;
+}
+.text-left {
+    text-align: left !important;
+}
+.text-right {
+    text-align: right !important;
+}
+.text-center {
+    text-align: center !important;
+}
+
+@each $color, $value in $theme-colors {
+    .ion-color-#{$color} {
+        color: $value;
+    }
+    .text-#{$color} {
+        color: $value !important;
+    }
+}
