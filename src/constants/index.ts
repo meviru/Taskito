@@ -4,6 +4,7 @@ const Constants = {
         BOARD_TAB: "BoardTab",
         CHAT_TAB: "ChatTab",
         TASK_TAB: "TaskTab",
+        ADD_NEW_TASK: "AddNewTask",
         TABS_PAGE: "TabsPage",
     },
     COMPONENT: {

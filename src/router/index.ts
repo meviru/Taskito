@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'task',
-        component: () => import('@/views/Task.vue')
+        component: () => import('@/views/Task.vue'),
       },
       {
         path: 'board',
@@ -32,7 +32,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Chat.vue')
       }
     ]
-  }
+  },
+  {
+    path: '/add-new-task/',
+    component: () => import('@/views/AddNewTask.vue'),
+  },
 ]
 
 const router = createRouter({

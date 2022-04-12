@@ -18,7 +18,7 @@
             <strong>Today</strong>
           </div>
           <div class="topbar-bottom__right">
-            <ion-button mode="md" href="/tabs/task/add" color="secondary">
+            <ion-button mode="md" href="/add-new-task" color="secondary">
               <ion-icon slot="start" :icon="addOutline" />
               <span>Add Task</span>
             </ion-button>
@@ -73,7 +73,7 @@ export default defineComponent({
   setup() {
     return {
       toolbarTitle: "Task",
-      addOutline
+      addOutline,
     };
   },
   methods: {
