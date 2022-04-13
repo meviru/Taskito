@@ -1,7 +1,14 @@
 .c-form {
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - $modal-topbar-height);
+    &__control {
+        flex-grow: 1;
+    }
     .item-input {
         --padding-start: 0;
+        --inner-padding-end: 0;
         --background: transparent;
         &.item-has-focus {
             --full-highlight-height: 1px;
@@ -12,9 +19,20 @@
                 }
             }
         }
+        .native-input {
+            font-size: $font-size-base * 0.95;
+            font-weight: 500;
+        }
         ion-label {
             text-transform: uppercase;
             color: darken($gray, 5%);
         }
+        ion-icon {
+            opacity: 0.4;
+            font-size: $font-size-base * 1.2;
+        }
+    }
+    ion-row {
+        gap: 30px;
     }
 }

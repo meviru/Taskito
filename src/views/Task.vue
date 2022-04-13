@@ -61,10 +61,80 @@
         />
         <ion-content>
           <div class="c-form">
-            <ion-item mode="md">
-              <ion-label mode="md" position="stacked">Task Name</ion-label>
-              <ion-input mode="md"></ion-input>
-            </ion-item>
+            <div class="c-form__control">
+              <ion-item mode="md">
+                <ion-label position="stacked">Task Name</ion-label>
+                <ion-input mode="md"></ion-input>
+              </ion-item>
+              <ion-item mode="md">
+                <ion-label position="stacked">Date</ion-label>
+                <div class="d-flex align-items-center w-100">
+                  <ion-input mode="md" id="datePicker"></ion-input>
+                  <ion-icon slot="end" :icon="calendarClearOutline" />
+                  <ion-popover trigger="datePicker" mode="md" size="cover">
+                    <ng-template>
+                      <ion-datetime
+                        presentation="date"
+                        mode="md"
+                      ></ion-datetime>
+                    </ng-template>
+                  </ion-popover>
+                </div>
+              </ion-item>
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col>
+                    <ion-item mode="md">
+                      <ion-label position="stacked">Start Time</ion-label>
+                      <div class="d-flex align-items-center">
+                        <ion-input mode="md" id="startTimePicker"></ion-input>
+                        <ion-icon slot="end" :icon="chevronDownOutline" />
+                        <ion-popover
+                          trigger="startTimePicker"
+                          mode="md"
+                          size="cover"
+                        >
+                          <ng-template>
+                            <ion-datetime
+                              presentation="time"
+                              mode="md"
+                            ></ion-datetime>
+                          </ng-template>
+                        </ion-popover>
+                      </div>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col>
+                    <ion-item mode="md">
+                      <ion-label position="stacked">End Time</ion-label>
+                      <div class="d-flex align-items-center">
+                        <ion-input mode="md" id="endTimePicker"></ion-input>
+                        <ion-icon slot="end" :icon="chevronDownOutline" />
+                        <ion-popover
+                          trigger="endTimePicker"
+                          mode="md"
+                          size="cover"
+                        >
+                          <ng-template>
+                            <ion-datetime
+                              presentation="time"
+                              mode="md"
+                            ></ion-datetime>
+                          </ng-template>
+                        </ion-popover>
+                      </div>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <ion-item mode="md">
+                <ion-label position="stacked">Description</ion-label>
+                <ion-input mode="md"></ion-input>
+              </ion-item>
+            </div>
+            <div class="c-form__action">
+              <ion-button color="primary" expand="block">Done</ion-button>
+            </div>
           </div>
         </ion-content>
       </ion-modal>
@@ -76,12 +146,16 @@
 import { defineComponent, ref } from "vue";
 import { IonPage, IonContent, IonModal } from "@ionic/vue";
 import { Constants } from "@/constants/index";
-import { addOutline } from "ionicons/icons";
+import {
+  addOutline,
+  chevronDownOutline,
+  calendarClearOutline,
+} from "ionicons/icons";
 import Topbar from "@/components/topbar/Topbar.vue";
 import Card from "@/components/card/Card.vue";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
-
 import CommonMixin from "@/mixins/common";
+
 export default defineComponent({
   name: Constants.NAME.TASK_TAB,
   components: { IonContent, IonPage, IonModal, Topbar, Card, ModalTopbar },
@@ -92,6 +166,8 @@ export default defineComponent({
     return {
       toolbarTitle: "Task",
       addOutline,
+      calendarClearOutline,
+      chevronDownOutline,
       isModalOpenRef,
       toggleModal,
     };
