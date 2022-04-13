@@ -33,10 +33,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: '/add-new-task/',
-    component: () => import('@/views/AddNewTask.vue'),
-  },
 ]
 
 const router = createRouter({

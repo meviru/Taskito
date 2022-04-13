@@ -18,7 +18,7 @@
             <strong>Today</strong>
           </div>
           <div class="topbar-bottom__right">
-            <ion-button mode="md" href="/add-new-task" color="secondary">
+            <ion-button mode="md" @click="toggleModal(true)" color="secondary">
               <ion-icon slot="start" :icon="addOutline" />
               <span>Add Task</span>
             </ion-button>
@@ -45,7 +45,7 @@
           </li>
         </ul>
         <div class="card-listing">
-          <Card
+          <card
             :card-header="2"
             card-title="New Web UI Design Project"
             card-description="Website UI Design for $500"
@@ -54,26 +54,46 @@
           />
         </div>
       </div>
+      <ion-modal mode="ios" css-class="c-modal" :is-open="isModalOpenRef">
+        <modal-topbar
+          toolbar-title="Add Task"
+          @closeModal="toggleModal(false)"
+        />
+        <ion-content>
+          <div class="c-form">
+            <ion-item mode="md">
+              <ion-label mode="md" position="stacked">Task Name</ion-label>
+              <ion-input mode="md"></ion-input>
+            </ion-item>
+          </div>
+        </ion-content>
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import { IonPage, IonContent, IonModal } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import { addOutline } from "ionicons/icons";
 import Topbar from "@/components/topbar/Topbar.vue";
-import Card from "@/components/topbar/Card.vue";
+import Card from "@/components/card/Card.vue";
+import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
+
 import CommonMixin from "@/mixins/common";
 export default defineComponent({
   name: Constants.NAME.TASK_TAB,
-  components: { IonContent, IonPage, Topbar, Card },
+  components: { IonContent, IonPage, IonModal, Topbar, Card, ModalTopbar },
   mixins: [CommonMixin],
   setup() {
+    let isModalOpenRef = ref(false);
+    const toggleModal = (state: boolean) => (isModalOpenRef.value = state);
     return {
       toolbarTitle: "Task",
       addOutline,
+      isModalOpenRef,
+      toggleModal,
     };
   },
   methods: {

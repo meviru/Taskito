@@ -1,0 +1,20 @@
+.c-modal {
+    &__topbar {
+        contain: none;
+        padding: 0 15px;
+        --min-height: 70px;
+        --background: #{$primary};
+        @include curve-design(-35px, -35px);
+        ion-icon {
+            color: $white;
+            font-size: $font-size-base * 1.5;
+        }
+        .title-default {
+            padding-left: 5px;
+            color: $white;
+            line-height: 1;
+            font-weight: 500;
+            font-size: $font-size-base * 1.2;
+        }
+    }
+}

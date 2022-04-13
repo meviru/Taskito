@@ -1,0 +1,20 @@
+.c-form {
+    padding: 15px;
+    .item-input {
+        --padding-start: 0;
+        --background: transparent;
+        &.item-has-focus {
+            --full-highlight-height: 1px;
+            --highlight-background: #{$primary};
+            ion-label {
+                &:not(.ion-color) {
+                    color: $primary;
+                }
+            }
+        }
+        ion-label {
+            text-transform: uppercase;
+            color: darken($gray, 5%);
+        }
+    }
+}

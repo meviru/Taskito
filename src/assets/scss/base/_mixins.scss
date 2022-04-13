@@ -1,0 +1,22 @@
+@mixin curve-design($x: 35px, $y: 35px) {
+    &:before,
+    &:after {
+        position: absolute;
+        content: "";
+        left: 0;
+        bottom: -40px;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        box-shadow: #{$x} #{$y} 0 20px $primary;
+    }
+    &:after {
+        right: 0;
+        left: auto;
+        transform: scaleX(-1);
+    }
+}
+
+@mixin card-shadow($top, $left) {
+    box-shadow: $top $left 15px -8px rgba($primary, 0.3);
+}
