@@ -30,8 +30,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'chat',
         component: () => import('@/views/Chat.vue')
-      }
+      },
     ]
+  },
+  {
+    path: '/tabs/task/add',
+    component: () => import('@/views/AddNewTask.vue')
   },
 ]
 
