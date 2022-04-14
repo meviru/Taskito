@@ -20,10 +20,13 @@
     "axios": "0.21.0",
     "chart.js": "^3.7.1",
     "core-js": "^3.6.5",
+    "firebase": "^9.6.10",
     "motion": "^10.7.0",
+    "vee-validate": "^4.5.11",
     "vue": "^3.2.21",
     "vue-chartjs": "^4.0.5",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@capacitor/cli": "3.4.3",

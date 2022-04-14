@@ -1,4 +1,5 @@
-.button {
+.button,
+.submit {
   --border-radius: 10px;
   --box-shadow: none;
   height: 40px;
@@ -6,9 +7,16 @@
   font-size: $font-size-base * 0.75;
   text-transform: unset;
   letter-spacing: normal;
+  &.submit-block {
+    display: block;
+  }
   @each $color, $value in $theme-colors {
     &.ion-color-#{$color} {
       --ion-color-base: #{$value} !important;
+      &::part(native) {
+        color: $white;
+        background: $value;
+      }
     }
   }
 }

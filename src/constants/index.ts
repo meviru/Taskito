@@ -14,6 +14,9 @@ const Constants = {
     },
     API_URL: {
         TODOS: "todos"
-    }
+    },
+    VALIDATION: {
+        REQUIRED: "This field is required",
+    },
 }
 export { Constants };

@@ -2,11 +2,12 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-    height: calc(100% - $modal-topbar-height);
     &__control {
         flex-grow: 1;
     }
     .item-input {
+        overflow: unset;
+        --min-height: auto;
         --padding-start: 0;
         --inner-padding-end: 0;
         --background: transparent;
@@ -35,4 +36,10 @@
     ion-row {
         gap: 30px;
     }
+}
+
+.invalid-error {
+    color: $danger;
+    font-weight: 500;
+    font-size: $font-size-base * 0.75;
 }
