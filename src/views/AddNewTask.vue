@@ -6,7 +6,6 @@
     />
     <ion-content :fullscreen="true">
       <Form @submit="onSubmit" v-slot="{ meta, errors }" class="c-form h-100">
-        {{ errors }}
         <div class="c-form__control">
           <ion-item mode="md">
             <ion-label position="stacked">Task Name</ion-label>
@@ -58,7 +57,12 @@
           <ion-item mode="md">
             <ion-label position="stacked">Date</ion-label>
             <div class="d-flex align-items-center w-100">
-              <ion-input name="taskName" mode="md" id="datePicker"></ion-input>
+              <ion-input
+                name="taskDate"
+                :value="taskDate"
+                mode="md"
+                id="datePicker"
+              ></ion-input>
               <ion-icon slot="end" :icon="calendarClearOutline" />
               <ion-popover trigger="datePicker" mode="md" size="cover">
                 <ng-template>
@@ -137,6 +141,7 @@ import {
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { string } from "yup";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
+import { useIonRouter } from "@ionic/vue";
 export default defineComponent({
   name: Constants.NAME.ADD_NEW_TASK,
   components: { IonContent, IonPage, ModalTopbar, Form, Field, ErrorMessage },
@@ -150,6 +155,7 @@ export default defineComponent({
   data() {
     return {
       modalTopbarTitle: "Add Task",
+      ionRouter: useIonRouter(),
       isRequired: string()
         .required(Constants.VALIDATION.REQUIRED)
         .nullable(true),
@@ -157,7 +163,7 @@ export default defineComponent({
   },
   methods: {
     closeModal() {
-      this.$router.go(-1);
+      this.ionRouter.back();
     },
     onSubmit(values: any) {
       console.log(values);
