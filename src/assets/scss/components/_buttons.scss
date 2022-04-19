@@ -1,6 +1,6 @@
 .button,
 .submit {
-  --border-radius: 10px;
+  --border-radius: #{$border-radius};
   --box-shadow: none;
   height: 40px;
   margin: 0;

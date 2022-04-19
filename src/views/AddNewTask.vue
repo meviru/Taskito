@@ -5,8 +5,8 @@
       @closeModal="closeModal()"
     />
     <ion-content :fullscreen="true">
-      <Form @submit="onSubmit" v-slot="{ meta, errors }" class="c-form h-100">
-        <div class="c-form__control">
+      <Form @submit="onSubmit" v-slot="{ errors }" class="c-form h-100">
+        <ion-content class="c-form__content">
           <ion-item mode="md">
             <ion-label position="stacked">Task Name</ion-label>
             <Field
@@ -16,15 +16,19 @@
               v-slot="{ field }"
               :rules="isRequired"
             >
-              <ion-input
-                name="task.name"
-                inputmode="text"
-                mode="md"
-                v-bind="field"
+              <div
+                class="w-100 form-control"
                 :class="{
                   'is-invalid': errors['task.name'],
                 }"
-              ></ion-input>
+              >
+                <ion-input
+                  name="task.name"
+                  inputmode="text"
+                  mode="md"
+                  v-bind="field"
+                ></ion-input>
+              </div>
             </Field>
             <div class="invalid-error">
               <ErrorMessage name="task.name" />
@@ -39,15 +43,19 @@
               v-slot="{ field }"
               :rules="isRequired"
             >
-              <ion-input
-                name="task.description"
-                type="text"
-                mode="md"
-                v-bind="field"
+              <div
+                class="w-100 form-control"
                 :class="{
                   'is-invalid': errors['task.description'],
                 }"
-              ></ion-input>
+              >
+                <ion-input
+                  name="task.description"
+                  type="text"
+                  mode="md"
+                  v-bind="field"
+                ></ion-input>
+              </div>
             </Field>
             <div class="invalid-error">
               <ErrorMessage name="task.description" />
@@ -56,7 +64,7 @@
 
           <ion-item mode="md">
             <ion-label position="stacked">Date</ion-label>
-            <div class="d-flex align-items-center w-100">
+            <div class="form-control d-flex align-items-center w-100">
               <ion-input
                 name="taskDate"
                 :value="taskDate"
@@ -64,11 +72,6 @@
                 id="datePicker"
               ></ion-input>
               <ion-icon slot="end" :icon="calendarClearOutline" />
-              <ion-popover trigger="datePicker" mode="md" size="cover">
-                <ng-template>
-                  <ion-datetime presentation="date" mode="md"></ion-datetime>
-                </ng-template>
-              </ion-popover>
             </div>
           </ion-item>
           <ion-grid class="ion-no-padding">
@@ -76,51 +79,26 @@
               <ion-col>
                 <ion-item mode="md">
                   <ion-label position="stacked">Start Time</ion-label>
-                  <div class="d-flex align-items-center">
+                  <div class="form-control d-flex align-items-center">
                     <ion-input mode="md" id="startTimePicker"></ion-input>
                     <ion-icon slot="end" :icon="chevronDownOutline" />
-                    <ion-popover
-                      trigger="startTimePicker"
-                      mode="md"
-                      size="cover"
-                    >
-                      <ng-template>
-                        <ion-datetime
-                          presentation="time"
-                          mode="md"
-                        ></ion-datetime>
-                      </ng-template>
-                    </ion-popover>
                   </div>
                 </ion-item>
               </ion-col>
               <ion-col>
                 <ion-item mode="md">
                   <ion-label position="stacked">End Time</ion-label>
-                  <div class="d-flex align-items-center">
+                  <div class="form-control d-flex align-items-center">
                     <ion-input mode="md" id="endTimePicker"></ion-input>
                     <ion-icon slot="end" :icon="chevronDownOutline" />
-                    <ion-popover trigger="endTimePicker" mode="md" size="cover">
-                      <ng-template>
-                        <ion-datetime
-                          presentation="time"
-                          mode="md"
-                        ></ion-datetime>
-                      </ng-template>
-                    </ion-popover>
                   </div>
                 </ion-item>
               </ion-col>
             </ion-row>
           </ion-grid>
-        </div>
+        </ion-content>
         <div class="c-form__action">
-          <ion-button
-            :disabled="!meta.valid"
-            type="submit"
-            color="primary"
-            expand="block"
-          >
+          <ion-button type="submit" color="primary" expand="block">
             Done
           </ion-button>
         </div>
@@ -130,7 +108,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import {
