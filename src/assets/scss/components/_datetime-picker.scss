@@ -14,3 +14,15 @@
         }
     }
 }
+
+.c-modal {
+    &__datepicker {
+        ion-datetime {
+            width: auto;
+            max-width: $datepicker-width;
+            height: $datepicker-height;
+            --ion-color-base: #{$primary} !important;
+            --ion-color-base-rgb: transparent !important;
+        }
+    }
+}

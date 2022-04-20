@@ -64,15 +64,41 @@
 
           <ion-item mode="md">
             <ion-label position="stacked">Date</ion-label>
-            <div class="form-control d-flex align-items-center w-100">
-              <ion-input
-                name="taskDate"
-                :value="taskDate"
-                mode="md"
-                id="datePicker"
-              ></ion-input>
-              <ion-icon slot="end" :icon="calendarClearOutline" />
+            <Field
+              v-model="taskDate"
+              type="text"
+              name="task.taskDate"
+              v-slot="{ field }"
+              :rules="isRequired"
+            >
+              <div class="form-control d-flex align-items-center w-100">
+                <ion-input
+                  name="task.taskDate"
+                  mode="md"
+                  v-bind="field"
+                  @click="setDatepickerOpen(true)"
+                ></ion-input>
+                <ion-icon slot="end" :icon="calendarClearOutline" />
+              </div>
+            </Field>
+            <div class="invalid-error">
+              <ErrorMessage name="task.taskDate" />
             </div>
+            <ion-modal
+              mode="md"
+              class="c-modal__datepicker"
+              show-backdrop="true"
+              :is-open="dismissDatepicker"
+              @didDismiss="setDatepickerOpen(false)"
+            >
+              <ion-content force-overscroll="false">
+                <ion-datetime
+                  mode="md"
+                  presentation="date"
+                  @ionChange="formatDate"
+                ></ion-datetime>
+              </ion-content>
+            </ion-modal>
           </ion-item>
           <ion-grid class="ion-no-padding">
             <ion-row>
@@ -108,8 +134,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import {
+  IonPage,
+  IonContent,
+  useIonRouter,
+  IonModal,
+  IonDatetime,
+} from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import {
   addOutline,
@@ -118,11 +150,20 @@ import {
 } from "ionicons/icons";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import { string } from "yup";
+import { format, parseISO } from "date-fns";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
-import { useIonRouter } from "@ionic/vue";
 export default defineComponent({
   name: Constants.NAME.ADD_NEW_TASK,
-  components: { IonContent, IonPage, ModalTopbar, Form, Field, ErrorMessage },
+  components: {
+    IonContent,
+    IonPage,
+    ModalTopbar,
+    Form,
+    Field,
+    ErrorMessage,
+    IonModal,
+    IonDatetime,
+  },
   setup() {
     return {
       addOutline,
@@ -134,12 +175,22 @@ export default defineComponent({
     return {
       modalTopbarTitle: "Add Task",
       ionRouter: useIonRouter(),
+      taskDate: "",
+      dismissDatepicker: false,
       isRequired: string()
         .required(Constants.VALIDATION.REQUIRED)
         .nullable(true),
     };
   },
   methods: {
+    formatDate(event: any) {
+      if (event.detail.value === undefined) return;
+      this.taskDate = format(parseISO(event.detail.value), "MMM dd, yyyy");
+      this.dismissDatepicker = false;
+    },
+    setDatepickerOpen(state: boolean) {
+      this.dismissDatepicker = state;
+    },
     closeModal() {
       this.ionRouter.back();
     },
