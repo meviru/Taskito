@@ -106,7 +106,11 @@
                 <ion-item mode="md">
                   <ion-label position="stacked">Start Time</ion-label>
                   <div class="form-control d-flex align-items-center">
-                    <ion-input mode="md" id="startTimePicker"></ion-input>
+                    <ion-input
+                      @click="openPicker"
+                      mode="md"
+                      id="startTimePicker"
+                    ></ion-input>
                     <ion-icon slot="end" :icon="chevronDownOutline" />
                   </div>
                 </ion-item>
@@ -115,7 +119,11 @@
                 <ion-item mode="md">
                   <ion-label position="stacked">End Time</ion-label>
                   <div class="form-control d-flex align-items-center">
-                    <ion-input mode="md" id="endTimePicker"></ion-input>
+                    <ion-input
+                      @click="openPicker"
+                      mode="md"
+                      id="endTimePicker"
+                    ></ion-input>
                     <ion-icon slot="end" :icon="chevronDownOutline" />
                   </div>
                 </ion-item>
@@ -134,13 +142,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import {
   IonPage,
   IonContent,
   useIonRouter,
   IonModal,
   IonDatetime,
+  pickerController,
 } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import {
@@ -180,6 +189,53 @@ export default defineComponent({
       isRequired: string()
         .required(Constants.VALIDATION.REQUIRED)
         .nullable(true),
+      pickingOptions: [
+        {
+          name: "hours",
+          options: [
+            { text: "12", value: "12" },
+            { text: "1", value: "1" },
+            { text: "2", value: "2" },
+            { text: "3", value: "3" },
+            { text: "4", value: "4" },
+            { text: "5", value: "5" },
+            { text: "6", value: "6" },
+            { text: "7", value: "7" },
+            { text: "8", value: "8" },
+            { text: "9", value: "9" },
+            { text: "10", value: "10" },
+            { text: "11", value: "11" },
+          ],
+        },
+        {
+          name: "minutes",
+          options: [
+            { text: "00", value: "00" },
+            { text: "10", value: "10" },
+            { text: "15", value: "15" },
+            { text: "20", value: "20" },
+            { text: "25", value: "25" },
+            { text: "30", value: "30" },
+            { text: "35", value: "35" },
+            { text: "40", value: "40" },
+            { text: "45", value: "45" },
+            { text: "50", value: "50" },
+            { text: "55", value: "55" },
+          ],
+        },
+        {
+          name: "label",
+          options: [
+            { text: "AM", value: "AM" },
+            { text: "PM", value: "PM" },
+          ],
+        },
+      ],
+      picked: {
+        hours: "",
+        minutes: "",
+        label: "",
+      },
     };
   },
   methods: {
@@ -193,6 +249,26 @@ export default defineComponent({
     },
     closeModal() {
       this.ionRouter.back();
+    },
+    async openPicker() {
+      const picker = await pickerController.create({
+        mode: "ios",
+        columns: this.pickingOptions,
+        buttons: [
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+          {
+            text: "Confirm",
+            handler: (value) => {
+              this.picked = value;
+              console.log(`Got Value ${value}`);
+            },
+          },
+        ],
+      });
+      await picker.present();
     },
     onSubmit(values: any) {
       console.log(values);
