@@ -1,0 +1,20 @@
+.c-chip-wrap {
+    margin: 10px -4px 0;
+}
+.c-chip {
+    height: 28px;
+    border-radius: 4px;
+    padding-inline: 10px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    font-size: $font-size-base * 0.75;
+    @each $color, $value in $theme-colors {
+        &__#{$color} {
+            --color: #{$value};
+            --background: #{rgba($value, 0.15)};
+            &.c-chip__selected {
+                border-color: $value;
+            }
+        }
+    }
+}

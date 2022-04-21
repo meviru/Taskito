@@ -30,6 +30,9 @@
                 ></ion-input>
               </div>
             </Field>
+            <div class="invalid-error">
+              <ErrorMessage name="task.name" />
+            </div>
           </ion-item>
           <ion-item mode="md">
             <ion-label position="stacked">Description</ion-label>
@@ -54,6 +57,9 @@
                 ></ion-input>
               </div>
             </Field>
+            <div class="invalid-error">
+              <ErrorMessage name="task.description" />
+            </div>
           </ion-item>
 
           <ion-item mode="md">
@@ -81,6 +87,9 @@
                 <ion-icon slot="end" :icon="calendarClearOutline" />
               </div>
             </Field>
+            <div class="invalid-error">
+              <ErrorMessage name="task.taskDate" />
+            </div>
             <ion-modal
               mode="md"
               class="c-modal__datepicker"
@@ -127,6 +136,9 @@
                       <ion-icon slot="end" :icon="chevronDownOutline" />
                     </div>
                   </Field>
+                  <div class="invalid-error">
+                    <ErrorMessage name="task.startTime" />
+                  </div>
                 </ion-item>
               </ion-col>
               <ion-col>
@@ -155,10 +167,46 @@
                       <ion-icon slot="end" :icon="chevronDownOutline" />
                     </div>
                   </Field>
+                  <div class="invalid-error">
+                    <ErrorMessage name="task.endTime" />
+                  </div>
                 </ion-item>
               </ion-col>
             </ion-row>
           </ion-grid>
+          <ion-item
+            class="item-input item-label-stacked"
+            lines="none"
+            mode="md"
+          >
+            <ion-label position="stacked">Board</ion-label>
+            <div class="c-chip-wrap">
+              <Field
+                type="hidden"
+                :rules="isRequiredBoard"
+                name="task.boardName"
+                v-model="selectedBoardItem"
+              />
+              <ion-chip
+                class="c-chip"
+                v-for="(item, index) in boardItems"
+                :key="index"
+                @click="onBoardSelect(item, index)"
+                :class="{
+                  'c-chip__secondary': item.value == 1,
+                  'c-chip__accent': item.value == 2,
+                  'c-chip__primary': item.value == 3,
+                  'c-chip__warning': item.value == 4,
+                  'c-chip__selected': isChipSelected == index,
+                }"
+              >
+                {{ item.text }}
+              </ion-chip>
+              <div class="invalid-error">
+                <ErrorMessage name="task.boardName" />
+              </div>
+            </div>
+          </ion-item>
         </ion-content>
         <div class="c-form__action">
           <ion-button type="submit" color="primary" expand="block">
@@ -186,8 +234,8 @@ import {
   chevronDownOutline,
   calendarClearOutline,
 } from "ionicons/icons";
-import { Form, Field } from "vee-validate";
-import { string } from "yup";
+import { Form, Field, ErrorMessage } from "vee-validate";
+import { string, object, number } from "yup";
 import { format, parseISO } from "date-fns";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
 export default defineComponent({
@@ -198,6 +246,7 @@ export default defineComponent({
     ModalTopbar,
     Form,
     Field,
+    ErrorMessage,
     IonModal,
     IonDatetime,
   },
@@ -209,6 +258,22 @@ export default defineComponent({
     };
   },
   data() {
+    const hoursArray: any = [];
+    for (let i = 1; i <= 12; i++) {
+      hoursArray.push({
+        text: i,
+        value: i,
+      });
+    }
+
+    const minutesArray: any = [];
+    for (let i = 0; i <= 60; i++) {
+      minutesArray.push({
+        text: i < 10 ? "0" + i : i,
+        value: i < 10 ? "0" + i : i,
+      });
+    }
+
     return {
       modalTopbarTitle: "Add Task",
       ionRouter: useIonRouter(),
@@ -218,39 +283,18 @@ export default defineComponent({
       isRequired: string()
         .required(Constants.VALIDATION.REQUIRED)
         .nullable(true),
+      isRequiredBoard: object().shape({
+        text: string().required(Constants.VALIDATION.REQUIRED).nullable(true),
+        value: number().required(Constants.VALIDATION.REQUIRED).nullable(true),
+      }),
       pickingOptions: [
         {
           name: "hours",
-          options: [
-            { text: "12", value: "12" },
-            { text: "1", value: "1" },
-            { text: "2", value: "2" },
-            { text: "3", value: "3" },
-            { text: "4", value: "4" },
-            { text: "5", value: "5" },
-            { text: "6", value: "6" },
-            { text: "7", value: "7" },
-            { text: "8", value: "8" },
-            { text: "9", value: "9" },
-            { text: "10", value: "10" },
-            { text: "11", value: "11" },
-          ],
+          options: hoursArray,
         },
         {
           name: "minutes",
-          options: [
-            { text: "00", value: "00" },
-            { text: "10", value: "10" },
-            { text: "15", value: "15" },
-            { text: "20", value: "20" },
-            { text: "25", value: "25" },
-            { text: "30", value: "30" },
-            { text: "35", value: "35" },
-            { text: "40", value: "40" },
-            { text: "45", value: "45" },
-            { text: "50", value: "50" },
-            { text: "55", value: "55" },
-          ],
+          options: minutesArray,
         },
         {
           name: "label",
@@ -270,6 +314,14 @@ export default defineComponent({
         minutes: "",
         label: "",
       },
+      boardItems: [
+        { text: "Urgent", value: 1 },
+        { text: "Running", value: 2 },
+        { text: "Ongoing", value: 3 },
+        { text: "Pending", value: 4 },
+      ],
+      isChipSelected: undefined as any,
+      selectedBoardItem: "",
     };
   },
   computed: {
@@ -340,6 +392,10 @@ export default defineComponent({
         ],
       });
       await picker.present();
+    },
+    onBoardSelect(item: any, index: number) {
+      this.isChipSelected = index;
+      this.selectedBoardItem = item;
     },
     onSubmit(values: any) {
       console.log(values);
