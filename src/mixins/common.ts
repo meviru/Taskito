@@ -26,7 +26,7 @@ const CommonMixin = {
             return month + " " + day + ", " + year;
         },
         daysOfTheWeek() {
-            const week = [];
+            const week: any = [];
             const date = new Date();
             for (let i = 1; i <= 7; i++) {
                 const first = date.getDate() - date.getDay() + i;

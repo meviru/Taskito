@@ -1,4 +1,5 @@
-import firebase from 'firebase';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import { ref, onUnmounted } from "vue";
 
 const config = {
@@ -12,7 +13,6 @@ const config = {
 };
 
 const firebaseapp = firebase.initializeApp(config);
-
 const db = firebaseapp.firestore();
 const tasksCollection = db.collection("tasks");
 

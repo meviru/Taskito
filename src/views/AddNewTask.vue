@@ -184,7 +184,7 @@
               <Field
                 type="hidden"
                 :rules="isRequiredBoard"
-                name="task.boardName"
+                name="task.board"
                 v-model="selectedBoardItem"
               />
               <ion-chip
@@ -203,7 +203,7 @@
                 {{ item.text }}
               </ion-chip>
               <div class="invalid-error">
-                <ErrorMessage name="task.boardName" />
+                <ErrorMessage name="task.board" />
               </div>
             </div>
           </ion-item>
@@ -238,6 +238,8 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { string, object, number } from "yup";
 import { format, parseISO } from "date-fns";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
+import { createTask } from "@/firebase";
+
 export default defineComponent({
   name: Constants.NAME.ADD_NEW_TASK,
   components: {
@@ -321,7 +323,7 @@ export default defineComponent({
         { text: "Pending", value: 4 },
       ],
       isChipSelected: undefined as any,
-      selectedBoardItem: "",
+      selectedBoardItem: {} as any,
     };
   },
   computed: {
@@ -397,8 +399,10 @@ export default defineComponent({
       this.isChipSelected = index;
       this.selectedBoardItem = item;
     },
-    onSubmit(values: any) {
-      console.log(values);
+    async onSubmit(values: any) {
+      const response = await createTask({ ...values });
+      console.log(response);
+      // this.ionRouter.back();
     },
   },
 });
