@@ -30,9 +30,6 @@
                 ></ion-input>
               </div>
             </Field>
-            <div class="invalid-error">
-              <ErrorMessage name="task.name" />
-            </div>
           </ion-item>
           <ion-item mode="md">
             <ion-label position="stacked">Description</ion-label>
@@ -57,9 +54,6 @@
                 ></ion-input>
               </div>
             </Field>
-            <div class="invalid-error">
-              <ErrorMessage name="task.description" />
-            </div>
           </ion-item>
 
           <ion-item mode="md">
@@ -71,19 +65,22 @@
               v-slot="{ field }"
               :rules="isRequired"
             >
-              <div class="form-control d-flex align-items-center w-100">
+              <div
+                class="form-control d-flex align-items-center w-100"
+                :class="{
+                  'is-invalid': errors['task.taskDate'],
+                }"
+              >
                 <ion-input
                   name="task.taskDate"
                   mode="md"
                   v-bind="field"
+                  readonly
                   @click="setDatepickerOpen(true)"
                 ></ion-input>
                 <ion-icon slot="end" :icon="calendarClearOutline" />
               </div>
             </Field>
-            <div class="invalid-error">
-              <ErrorMessage name="task.taskDate" />
-            </div>
             <ion-modal
               mode="md"
               class="c-modal__datepicker"
@@ -94,6 +91,8 @@
               <ion-content force-overscroll="false">
                 <ion-datetime
                   mode="md"
+                  class="c-datepicker"
+                  :value="taskDateISO"
                   presentation="date"
                   @ionChange="formatDate"
                 ></ion-datetime>
@@ -105,27 +104,57 @@
               <ion-col>
                 <ion-item mode="md">
                   <ion-label position="stacked">Start Time</ion-label>
-                  <div class="form-control d-flex align-items-center">
-                    <ion-input
-                      @click="openPicker"
-                      mode="md"
-                      id="startTimePicker"
-                    ></ion-input>
-                    <ion-icon slot="end" :icon="chevronDownOutline" />
-                  </div>
+                  <Field
+                    v-model="taskStartTime"
+                    type="text"
+                    name="task.startTime"
+                    v-slot="{ field }"
+                    :rules="isRequired"
+                  >
+                    <div
+                      class="form-control d-flex align-items-center"
+                      :class="{
+                        'is-invalid': errors['task.startTime'],
+                      }"
+                    >
+                      <ion-input
+                        @click="openPicker('start')"
+                        mode="md"
+                        readonly
+                        v-bind="field"
+                        id="startTimePicker"
+                      ></ion-input>
+                      <ion-icon slot="end" :icon="chevronDownOutline" />
+                    </div>
+                  </Field>
                 </ion-item>
               </ion-col>
               <ion-col>
                 <ion-item mode="md">
                   <ion-label position="stacked">End Time</ion-label>
-                  <div class="form-control d-flex align-items-center">
-                    <ion-input
-                      @click="openPicker"
-                      mode="md"
-                      id="endTimePicker"
-                    ></ion-input>
-                    <ion-icon slot="end" :icon="chevronDownOutline" />
-                  </div>
+                  <Field
+                    v-model="taskEndTime"
+                    type="text"
+                    name="task.endTime"
+                    v-slot="{ field }"
+                    :rules="isRequired"
+                  >
+                    <div
+                      class="form-control d-flex align-items-center"
+                      :class="{
+                        'is-invalid': errors['task.endTime'],
+                      }"
+                    >
+                      <ion-input
+                        @click="openPicker('end')"
+                        mode="md"
+                        readonly
+                        v-bind="field"
+                        id="endTimePicker"
+                      ></ion-input>
+                      <ion-icon slot="end" :icon="chevronDownOutline" />
+                    </div>
+                  </Field>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -157,7 +186,7 @@ import {
   chevronDownOutline,
   calendarClearOutline,
 } from "ionicons/icons";
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { Form, Field } from "vee-validate";
 import { string } from "yup";
 import { format, parseISO } from "date-fns";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
@@ -169,7 +198,6 @@ export default defineComponent({
     ModalTopbar,
     Form,
     Field,
-    ErrorMessage,
     IonModal,
     IonDatetime,
   },
@@ -185,6 +213,7 @@ export default defineComponent({
       modalTopbarTitle: "Add Task",
       ionRouter: useIonRouter(),
       taskDate: "",
+      taskDateISO: "",
       dismissDatepicker: false,
       isRequired: string()
         .required(Constants.VALIDATION.REQUIRED)
@@ -231,16 +260,50 @@ export default defineComponent({
           ],
         },
       ],
-      picked: {
+      pickedStartDate: {
+        hours: "",
+        minutes: "",
+        label: "",
+      },
+      pickedEndDate: {
         hours: "",
         minutes: "",
         label: "",
       },
     };
   },
+  computed: {
+    taskStartTime(): string {
+      if (this.pickedStartDate.hours) {
+        return (
+          this.pickedStartDate.hours +
+          ":" +
+          this.pickedStartDate.minutes +
+          " " +
+          this.pickedStartDate.label
+        );
+      } else {
+        return "";
+      }
+    },
+    taskEndTime(): string {
+      if (this.pickedEndDate.hours) {
+        return (
+          this.pickedEndDate.hours +
+          ":" +
+          this.pickedEndDate.minutes +
+          " " +
+          this.pickedEndDate.label
+        );
+      } else {
+        return "";
+      }
+    },
+  },
   methods: {
     formatDate(event: any) {
       if (event.detail.value === undefined) return;
+      this.taskDateISO = event.detail.value;
       this.taskDate = format(parseISO(event.detail.value), "MMM dd, yyyy");
       this.dismissDatepicker = false;
     },
@@ -250,9 +313,10 @@ export default defineComponent({
     closeModal() {
       this.ionRouter.back();
     },
-    async openPicker() {
+    async openPicker(time: string) {
       const picker = await pickerController.create({
         mode: "ios",
+        cssClass: "c-timepicker",
         columns: this.pickingOptions,
         buttons: [
           {
@@ -262,8 +326,15 @@ export default defineComponent({
           {
             text: "Confirm",
             handler: (value) => {
-              this.picked = value;
-              console.log(`Got Value ${value}`);
+              if (time == "start") {
+                this.pickedStartDate.hours = value.hours.value;
+                this.pickedStartDate.minutes = value.minutes.value;
+                this.pickedStartDate.label = value.label.value;
+              } else {
+                this.pickedEndDate.hours = value.hours.value;
+                this.pickedEndDate.minutes = value.minutes.value;
+                this.pickedEndDate.label = value.label.value;
+              }
             },
           },
         ],

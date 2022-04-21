@@ -26,3 +26,10 @@
         }
     }
 }
+
+.c-timepicker {
+    --border-width: 0;
+    .picker-button {
+        color: $primary;
+    }
+}
