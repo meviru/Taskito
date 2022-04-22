@@ -1,15 +1,10 @@
 <template>
   <ion-card mode="ios" class="card ion-no-margin">
-    <ion-text
-      :color="getCardColor(cardHeader)"
-      class="d-block card-header"
-      >{{ getCardHeader(cardHeader) }}</ion-text
-    >
+    <ion-text :color="getCardColor(cardHeader)" class="d-block card-header">{{
+      getCardHeader(cardHeader)
+    }}</ion-text>
     <div class="card-content">
-      <div
-        class="card-title"
-        :class="`card-title-${getCardColor(cardHeader)}`"
-      >
+      <div class="card-title" :class="`card-title-${getCardColor(cardHeader)}`">
         <h2 class="card-title__text">{{ cardTitle }}</h2>
         <span class="text-muted">{{ cardDescription }}</span>
       </div>
@@ -47,9 +42,9 @@ export default defineComponent({
     getCardColor(value: number) {
       switch (value) {
         case 1:
-          return "primary";
-        case 2:
           return "secondary";
+        case 2:
+          return "primary";
         case 3:
           return "accent";
         case 4:
@@ -61,9 +56,9 @@ export default defineComponent({
     getCardHeader(value: number) {
       switch (value) {
         case 1:
-          return "Ongoing";
-        case 2:
           return "Urgent";
+        case 2:
+          return "Ongoing";
         case 3:
           return "Running";
         case 4:

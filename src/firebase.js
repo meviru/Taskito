@@ -25,9 +25,9 @@ export const getTasks = async () => {
 }
 
 export const useLoadTasks = () => {
-    const tasks = ref([]);
+    let tasks = ref([]);
     const close = tasksCollection.onSnapshot(snapshot => {
-        tasks.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        tasks.value = snapshot.docs.map(task => ({ ...task.data() }))
     })
     onUnmounted(close);
     return tasks;

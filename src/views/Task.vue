@@ -47,13 +47,15 @@
           </li>
         </ul>
         <div class="card-listing">
-          <card
-            :card-header="2"
-            card-title="New Web UI Design Project"
-            card-description="Website UI Design for $500"
-            card-timings="10-11 AM"
-            :card-persons="2"
-          />
+          <template v-for="(item, index) in tasksList" :key="index">
+            <card
+              :card-header="item.board?.value"
+              :card-title="item.name"
+              :card-description="item.description"
+              :card-timings="item.startTime"
+              :card-persons="2"
+            />
+          </template>
         </div>
       </div>
     </ion-content>
@@ -61,14 +63,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import { addOutline } from "ionicons/icons";
 import Topbar from "@/components/topbar/Topbar.vue";
 import Card from "@/components/card/Card.vue";
 import CommonMixin from "@/mixins/common";
-
+import { useLoadTasks } from "@/firebase";
 export default defineComponent({
   name: Constants.NAME.TASK_TAB,
   components: { IonContent, IonPage, Topbar, Card },
@@ -77,6 +79,12 @@ export default defineComponent({
     return {
       toolbarTitle: "Task",
       addOutline,
+      // tasksList,
+    };
+  },
+  data() {
+    return {
+      tasksList: [] as any,
     };
   },
   methods: {
@@ -84,6 +92,10 @@ export default defineComponent({
       const date = new Date();
       return day == date.getDate() ? true : false;
     },
+  },
+  created() {
+    const tasksListData = useLoadTasks();
+    this.tasksList = tasksListData;
   },
 });
 </script>

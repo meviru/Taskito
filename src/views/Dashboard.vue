@@ -22,7 +22,9 @@
               <ion-icon :icon="folderOutline" />
             </ion-avatar>
             <ion-label>Total Task</ion-label>
-            <ion-label class="text-muted" slot="end">100</ion-label>
+            <ion-label class="text-muted" slot="end">{{
+              totalTasks
+            }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -37,7 +39,9 @@
               <ion-icon :icon="checkmarkDoneOutline" />
             </ion-avatar>
             <ion-label>Completed</ion-label>
-            <ion-label class="text-muted" slot="end">10</ion-label>
+            <ion-label class="text-muted" slot="end">{{
+              completedTask
+            }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -52,7 +56,9 @@
               <ion-icon :icon="repeatOutline" />
             </ion-avatar>
             <ion-label>In Progress</ion-label>
-            <ion-label class="text-muted" slot="end">40</ion-label>
+            <ion-label class="text-muted" slot="end">{{
+              inProgressTask
+            }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -67,7 +73,9 @@
               <ion-icon :icon="addOutline" />
             </ion-avatar>
             <ion-label>Pending</ion-label>
-            <ion-label class="text-muted" slot="end">20</ion-label>
+            <ion-label class="text-muted" slot="end">{{
+              pendingTask
+            }}</ion-label>
           </ion-item>
           <ion-item>
             <ion-avatar
@@ -82,7 +90,9 @@
               <ion-icon :icon="pauseOutline" />
             </ion-avatar>
             <ion-label>On Hold</ion-label>
-            <ion-label class="text-muted" slot="end">30</ion-label>
+            <ion-label class="text-muted" slot="end">{{
+              onHoldTask
+            }}</ion-label>
           </ion-item>
         </ion-list>
       </div>
@@ -91,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, watch } from "vue";
 import {
   IonPage,
   IonContent,
@@ -117,33 +127,13 @@ import {
   CategoryScale,
 } from "chart.js";
 import Topbar from "@/components/topbar/Topbar.vue";
+import { useLoadTasks } from "@/firebase";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 export default defineComponent({
   name: Constants.NAME.DASHBOARD_TAB,
   components: { IonContent, IonPage, Doughnut, Topbar },
   setup() {
-    // Chart integration
-    const chartData = {
-      datasets: [
-        {
-          backgroundColor: ["#5a55ca", "#2bc09c", "#f26950", "#ffab58"],
-          data: [10, 40, 20, 30],
-        },
-      ],
-    };
-
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        animateRotate: true,
-      },
-      hoverOffset: 4,
-      hoverBorderWidth: 0,
-      plugins: {},
-    };
-
     const delayCount: any = stagger(0.1);
     const addAnimation = () => {
       animate(
@@ -186,15 +176,78 @@ export default defineComponent({
       repeatOutline,
       addOutline,
       pauseOutline,
+    };
+  },
+  data() {
+    // Chart integration
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: {
+        animateRotate: true,
+      },
+      hoverOffset: 4,
+      hoverBorderWidth: 0,
+      plugins: {},
+    };
+
+    return {
       // Chart options
-      chartData,
+      chartData: {
+        datasets: [
+          {
+            backgroundColor: ["#5a55ca", "#2bc09c", "#f26950", "#ffab58"],
+            data: [] as any,
+          },
+        ],
+      },
       chartOptions,
       chartId: "dashboard-chart",
       cssClasses: "dashboard-chart",
       styles: {
         height: "200px",
       },
+      tasksList: [] as any,
+      completedTask: 0,
+      inProgressTask: 0,
+      pendingTask: 0,
+      onHoldTask: 0,
     };
+  },
+  watch: {
+    tasksList(newValue) {
+      if (newValue) {
+        this.tasksList = newValue;
+
+        this.completedTask = this.tasksList.filter(
+          (item: any) => item.board.value == 5
+        ).length;
+        this.inProgressTask = this.tasksList.filter(
+          (item: any) => item.board.value == 3 || item.board.value == 2
+        ).length;
+        this.pendingTask = this.tasksList.filter(
+          (item: any) => item.board.value == 1
+        ).length;
+        this.onHoldTask = this.tasksList.filter(
+          (item: any) => item.board.value == 4
+        ).length;
+
+        this.chartData.datasets[0].data = [
+          this.completedTask,
+          this.inProgressTask,
+          this.pendingTask,
+          this.onHoldTask,
+        ];
+      }
+    },
+  },
+  computed: {
+    totalTasks(): number {
+      return this.tasksList.length;
+    },
+  },
+  created() {
+    this.tasksList = useLoadTasks();
   },
 });
 </script>

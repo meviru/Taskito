@@ -12,18 +12,18 @@
             <Field
               v-model="taskName"
               type="text"
-              name="task.name"
+              name="name"
               v-slot="{ field }"
               :rules="isRequired"
             >
               <div
                 class="w-100 form-control"
                 :class="{
-                  'is-invalid': errors['task.name'],
+                  'is-invalid': errors['name'],
                 }"
               >
                 <ion-input
-                  name="task.name"
+                  name="name"
                   inputmode="text"
                   mode="md"
                   v-bind="field"
@@ -31,7 +31,7 @@
               </div>
             </Field>
             <div class="invalid-error">
-              <ErrorMessage name="task.name" />
+              <ErrorMessage name="name" />
             </div>
           </ion-item>
           <ion-item mode="md">
@@ -39,18 +39,18 @@
             <Field
               v-model="taskDescription"
               type="text"
-              name="task.description"
+              name="description"
               v-slot="{ field }"
               :rules="isRequired"
             >
               <div
                 class="w-100 form-control"
                 :class="{
-                  'is-invalid': errors['task.description'],
+                  'is-invalid': errors['description'],
                 }"
               >
                 <ion-input
-                  name="task.description"
+                  name="description"
                   type="text"
                   mode="md"
                   v-bind="field"
@@ -58,7 +58,7 @@
               </div>
             </Field>
             <div class="invalid-error">
-              <ErrorMessage name="task.description" />
+              <ErrorMessage name="description" />
             </div>
           </ion-item>
 
@@ -67,18 +67,18 @@
             <Field
               v-model="taskDate"
               type="text"
-              name="task.taskDate"
+              name="taskDate"
               v-slot="{ field }"
               :rules="isRequired"
             >
               <div
                 class="form-control d-flex align-items-center w-100"
                 :class="{
-                  'is-invalid': errors['task.taskDate'],
+                  'is-invalid': errors['taskDate'],
                 }"
               >
                 <ion-input
-                  name="task.taskDate"
+                  name="taskDate"
                   mode="md"
                   v-bind="field"
                   readonly
@@ -88,7 +88,7 @@
               </div>
             </Field>
             <div class="invalid-error">
-              <ErrorMessage name="task.taskDate" />
+              <ErrorMessage name="taskDate" />
             </div>
             <ion-modal
               mode="md"
@@ -116,14 +116,14 @@
                   <Field
                     v-model="taskStartTime"
                     type="text"
-                    name="task.startTime"
+                    name="startTime"
                     v-slot="{ field }"
                     :rules="isRequired"
                   >
                     <div
                       class="form-control d-flex align-items-center"
                       :class="{
-                        'is-invalid': errors['task.startTime'],
+                        'is-invalid': errors['startTime'],
                       }"
                     >
                       <ion-input
@@ -137,7 +137,7 @@
                     </div>
                   </Field>
                   <div class="invalid-error">
-                    <ErrorMessage name="task.startTime" />
+                    <ErrorMessage name="startTime" />
                   </div>
                 </ion-item>
               </ion-col>
@@ -147,14 +147,14 @@
                   <Field
                     v-model="taskEndTime"
                     type="text"
-                    name="task.endTime"
+                    name="endTime"
                     v-slot="{ field }"
                     :rules="isRequired"
                   >
                     <div
                       class="form-control d-flex align-items-center"
                       :class="{
-                        'is-invalid': errors['task.endTime'],
+                        'is-invalid': errors['endTime'],
                       }"
                     >
                       <ion-input
@@ -168,7 +168,7 @@
                     </div>
                   </Field>
                   <div class="invalid-error">
-                    <ErrorMessage name="task.endTime" />
+                    <ErrorMessage name="endTime" />
                   </div>
                 </ion-item>
               </ion-col>
@@ -184,7 +184,7 @@
               <Field
                 type="hidden"
                 :rules="isRequiredBoard"
-                name="task.board"
+                name="board"
                 v-model="selectedBoardItem"
               />
               <ion-chip
@@ -203,7 +203,7 @@
                 {{ item.text }}
               </ion-chip>
               <div class="invalid-error">
-                <ErrorMessage name="task.board" />
+                <ErrorMessage name="board" />
               </div>
             </div>
           </ion-item>
@@ -318,9 +318,9 @@ export default defineComponent({
       },
       boardItems: [
         { text: "Urgent", value: 1 },
-        { text: "Running", value: 2 },
-        { text: "Ongoing", value: 3 },
-        { text: "Pending", value: 4 },
+        { text: "Ongoing", value: 2 },
+        { text: "Running", value: 3 },
+        { text: "Onhold", value: 4 },
       ],
       isChipSelected: undefined as any,
       selectedBoardItem: {} as any,
@@ -401,8 +401,9 @@ export default defineComponent({
     },
     async onSubmit(values: any) {
       const response = await createTask({ ...values });
-      console.log(response);
-      // this.ionRouter.back();
+      if (response) {
+        this.ionRouter.back();
+      }
     },
   },
 });
