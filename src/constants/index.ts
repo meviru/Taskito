@@ -10,7 +10,8 @@ const Constants = {
     COMPONENT: {
         TOPBAR: "TopbarComponent",
         MODAL_TOPBAR: "ModalTopbarComponent",
-        CARD: "CardComponent"
+        CARD: "CardComponent",
+        EMPTY_STATE: "EmptyStateComponent",
     },
     API_URL: {
         TODOS: "todos"

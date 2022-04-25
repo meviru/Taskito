@@ -1,0 +1,9 @@
+.c-alert-box {
+    .alert-button-group {
+        .alert-button {
+            &__delete {
+                color: $danger;
+            }
+        }
+    }
+}

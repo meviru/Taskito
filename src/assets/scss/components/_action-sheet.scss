@@ -1,0 +1,9 @@
+.c-action-sheet {
+    .action-sheet-group {
+        .action-sheet-button {
+            &__delete {
+                color: $danger;
+            }
+        }
+    }
+}

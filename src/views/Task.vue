@@ -46,17 +46,24 @@
             }}</strong>
           </li>
         </ul>
-        <div class="card-listing">
+        <div class="card-listing" v-if="totalTasks > 0">
           <template v-for="(item, index) in tasksList" :key="index">
             <card
+              :id="item.id"
               :card-header="item.board?.value"
               :card-title="item.name"
               :card-description="item.description"
-              :card-timings="item.startTime"
+              :card-timings="item.startTime + ` - ` + item.endTime"
               :card-persons="2"
             />
           </template>
         </div>
+        <template v-else>
+          <empty-state
+            empty-state-img="no-data-found.svg"
+            empty-state-desc="No Data Found"
+          />
+        </template>
       </div>
     </ion-content>
   </ion-page>
@@ -69,11 +76,12 @@ import { Constants } from "@/constants/index";
 import { addOutline } from "ionicons/icons";
 import Topbar from "@/components/topbar/Topbar.vue";
 import Card from "@/components/card/Card.vue";
+import EmptyState from "@/components/empty-state/EmptyState.vue";
 import CommonMixin from "@/mixins/common";
 import { useLoadTasks } from "@/firebase";
 export default defineComponent({
   name: Constants.NAME.TASK_TAB,
-  components: { IonContent, IonPage, Topbar, Card },
+  components: { IonContent, IonPage, Topbar, Card, EmptyState },
   mixins: [CommonMixin],
   setup() {
     return {
@@ -85,7 +93,16 @@ export default defineComponent({
   data() {
     return {
       tasksList: [] as any,
+      totalTasks: 0,
     };
+  },
+  watch: {
+    tasksList(newValue) {
+      if (newValue) {
+        this.tasksList = newValue;
+        this.totalTasks = this.tasksList.length;
+      }
+    },
   },
   methods: {
     isToday(day: any) {

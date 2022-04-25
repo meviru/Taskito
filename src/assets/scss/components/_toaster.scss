@@ -1,0 +1,4 @@
+.c-toaster {
+    --color: #{$white};
+    --background: #{lighten($black, 20%)};
+}

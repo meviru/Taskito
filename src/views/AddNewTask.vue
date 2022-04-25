@@ -227,6 +227,7 @@ import {
   IonModal,
   IonDatetime,
   pickerController,
+  toastController,
 } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import {
@@ -395,6 +396,16 @@ export default defineComponent({
       });
       await picker.present();
     },
+    async openToast() {
+      const toast = await toastController.create({
+        mode: "ios",
+        cssClass: "c-toaster",
+        position: 'bottom',
+        message: "Task has been added successfully.",
+        duration: 2000,
+      });
+      return toast.present();
+    },
     onBoardSelect(item: any, index: number) {
       this.isChipSelected = index;
       this.selectedBoardItem = item;
@@ -402,6 +413,7 @@ export default defineComponent({
     async onSubmit(values: any) {
       const response = await createTask({ ...values });
       if (response) {
+        this.openToast();
         this.ionRouter.back();
       }
     },

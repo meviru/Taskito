@@ -2,15 +2,25 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <topbar :toolbar-title="toolbarTitle" :is-bg-white="true" />
-      <div class="chart-wrapper">
-        <Doughnut
-          :css-classes="cssClasses"
-          :chart-id="chartId"
-          :chart-data="chartData"
-          :chart-options="chartOptions"
-          :styles="styles"
-          :plugins="plugins"
-        />
+      <div
+        class="chart-wrapper d-flex align-items-center justify-content-center"
+      >
+        <template v-if="totalTasks > 0">
+          <Doughnut
+            :css-classes="cssClasses"
+            :chart-id="chartId"
+            :chart-data="chartData"
+            :chart-options="chartOptions"
+            :styles="styles"
+            :plugins="plugins"
+          />
+        </template>
+        <template v-else>
+          <empty-state
+            empty-state-img="no-data-found.svg"
+            empty-state-desc="No Data Found"
+          />
+        </template>
       </div>
       <div class="wrapper">
         <ion-list class="card-list" lines="none">
@@ -127,12 +137,13 @@ import {
   CategoryScale,
 } from "chart.js";
 import Topbar from "@/components/topbar/Topbar.vue";
+import EmptyState from "@/components/empty-state/EmptyState.vue";
 import { useLoadTasks } from "@/firebase";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 export default defineComponent({
   name: Constants.NAME.DASHBOARD_TAB,
-  components: { IonContent, IonPage, Doughnut, Topbar },
+  components: { IonContent, IonPage, Doughnut, Topbar, EmptyState },
   setup() {
     const delayCount: any = stagger(0.1);
     const addAnimation = () => {

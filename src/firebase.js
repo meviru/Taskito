@@ -19,15 +19,20 @@ const tasksCollection = db.collection("tasks");
 export const createTask = task => {
     return tasksCollection.add(task);
 }
-export const getTasks = async () => {
-    const tasks = await tasksCollection.get();
-    return tasks.exists ? tasks.data() : null
+export const getTask = async id => {
+    const task = await tasksCollection.doc(id).get();
+    return task.exists ? task.data() : null
 }
-
+export const updateTask = async (id, task) => {
+    return tasksCollection.doc(id).update(task);
+}
+export const deleteTask = async id => {
+    return tasksCollection.doc(id).delete();
+}
 export const useLoadTasks = () => {
     let tasks = ref([]);
     const close = tasksCollection.onSnapshot(snapshot => {
-        tasks.value = snapshot.docs.map(task => ({ ...task.data() }))
+        tasks.value = snapshot.docs.map(task => ({ id: task.id, ...task.data() }))
     })
     onUnmounted(close);
     return tasks;
