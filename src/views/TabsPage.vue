@@ -3,10 +3,10 @@
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button tab="tab1" href="/tabs/dashboard">
+        <ion-tab-button tab="tab1" @click="hideMenu" href="/tabs/dashboard">
           <ion-icon :icon="gridOutline" />
         </ion-tab-button>
-        <ion-tab-button tab="tab2" href="/tabs/task">
+        <ion-tab-button tab="tab2" @click="hideMenu" href="/tabs/task">
           <ion-icon :icon="documentTextOutline" />
         </ion-tab-button>
         <ion-tab-button
@@ -30,10 +30,10 @@
             </li>
           </ul>
         </ion-tab-button>
-        <ion-tab-button tab="tab3" href="/tabs/board">
+        <ion-tab-button tab="tab3" @click="hideMenu" href="/tabs/board">
           <ion-icon :icon="albumsOutline" />
         </ion-tab-button>
-        <ion-tab-button tab="tab4" href="/tabs/chat">
+        <ion-tab-button tab="tab4" @click="hideMenu" href="/tabs/chat">
           <ion-icon :icon="chatboxOutline" />
         </ion-tab-button>
       </ion-tab-bar>
@@ -105,9 +105,11 @@ export default defineComponent({
     };
   },
   methods: {
-    toggleMenu(event) {
-      event.stopPropagation();
+    toggleMenu() {
       this.isMenuToggled = !this.isMenuToggled;
+    },
+    hideMenu() {
+      this.isMenuToggled = false;
     },
   },
 });
