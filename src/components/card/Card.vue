@@ -41,6 +41,7 @@
 import { defineComponent } from "vue";
 import { Constants } from "@/constants/index";
 import {
+  useIonRouter,
   actionSheetController,
   alertController,
   toastController,
@@ -59,6 +60,11 @@ export default defineComponent({
   ],
   setup() {
     return { timeOutline, peopleOutline, ellipsisVertical };
+  },
+  data() {
+    return {
+      ionRouter: useIonRouter(),
+    };
   },
   methods: {
     getCardColor(value: number) {
@@ -105,7 +111,8 @@ export default defineComponent({
             text: "Edit",
             cssClass: "action-sheet-button__edit",
             handler: () => {
-              console.log("Edit clicked");
+              // console.log("Edit clicked");
+              this.ionRouter.push(`/tabs/task/edit/${id}`);
             },
           },
           {

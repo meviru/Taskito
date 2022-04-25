@@ -191,13 +191,13 @@
                 class="c-chip"
                 v-for="(item, index) in boardItems"
                 :key="index"
-                @click="onBoardSelect(item, index)"
+                @click="onBoardSelect(item, index + 1)"
                 :class="{
                   'c-chip__secondary': item.value == 1,
                   'c-chip__accent': item.value == 2,
                   'c-chip__primary': item.value == 3,
                   'c-chip__warning': item.value == 4,
-                  'c-chip__selected': isChipSelected == index,
+                  'c-chip__selected': isChipSelected == index + 1,
                 }"
               >
                 {{ item.text }}
@@ -239,7 +239,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { string, object, number } from "yup";
 import { format, parseISO } from "date-fns";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
-import { createTask } from "@/firebase";
+import { createTask, getTask, updateTask } from "@/firebase";
 
 export default defineComponent({
   name: Constants.NAME.ADD_NEW_TASK,
@@ -280,8 +280,12 @@ export default defineComponent({
     return {
       modalTopbarTitle: "Add Task",
       ionRouter: useIonRouter(),
+      taskName: "",
+      taskDescription: "",
       taskDate: "",
       taskDateISO: "",
+      taskStartTime: "",
+      taskEndTime: "",
       dismissDatepicker: false,
       isRequired: string()
         .required(Constants.VALIDATION.REQUIRED)
@@ -294,10 +298,12 @@ export default defineComponent({
         {
           name: "hours",
           options: hoursArray,
+          selectedIndex: 0,
         },
         {
           name: "minutes",
           options: minutesArray,
+          selectedIndex: 0,
         },
         {
           name: "label",
@@ -305,18 +311,9 @@ export default defineComponent({
             { text: "AM", value: "AM" },
             { text: "PM", value: "PM" },
           ],
+          selectedIndex: 0,
         },
       ],
-      pickedStartDate: {
-        hours: "",
-        minutes: "",
-        label: "",
-      },
-      pickedEndDate: {
-        hours: "",
-        minutes: "",
-        label: "",
-      },
       boardItems: [
         { text: "Urgent", value: 1 },
         { text: "Ongoing", value: 2 },
@@ -325,34 +322,12 @@ export default defineComponent({
       ],
       isChipSelected: undefined as any,
       selectedBoardItem: {} as any,
+      isEdit: false,
     };
   },
   computed: {
-    taskStartTime(): string {
-      if (this.pickedStartDate.hours) {
-        return (
-          this.pickedStartDate.hours +
-          ":" +
-          this.pickedStartDate.minutes +
-          " " +
-          this.pickedStartDate.label
-        );
-      } else {
-        return "";
-      }
-    },
-    taskEndTime(): string {
-      if (this.pickedEndDate.hours) {
-        return (
-          this.pickedEndDate.hours +
-          ":" +
-          this.pickedEndDate.minutes +
-          " " +
-          this.pickedEndDate.label
-        );
-      } else {
-        return "";
-      }
+    getTaskId() {
+      return this.$route.params.id;
     },
   },
   methods: {
@@ -382,13 +357,19 @@ export default defineComponent({
             text: "Confirm",
             handler: (value) => {
               if (time == "start") {
-                this.pickedStartDate.hours = value.hours.value;
-                this.pickedStartDate.minutes = value.minutes.value;
-                this.pickedStartDate.label = value.label.value;
+                this.taskStartTime =
+                  value.hours.value +
+                  ":" +
+                  value.minutes.value +
+                  " " +
+                  value.label.value;
               } else {
-                this.pickedEndDate.hours = value.hours.value;
-                this.pickedEndDate.minutes = value.minutes.value;
-                this.pickedEndDate.label = value.label.value;
+                this.taskEndTime =
+                  value.hours.value +
+                  ":" +
+                  value.minutes.value +
+                  " " +
+                  value.label.value;
               }
             },
           },
@@ -396,12 +377,12 @@ export default defineComponent({
       });
       await picker.present();
     },
-    async openToast() {
+    async openToast(toastMessage) {
       const toast = await toastController.create({
         mode: "ios",
         cssClass: "c-toaster",
-        position: 'bottom',
-        message: "Task has been added successfully.",
+        position: "bottom",
+        message: toastMessage,
         duration: 2000,
       });
       return toast.present();
@@ -411,12 +392,46 @@ export default defineComponent({
       this.selectedBoardItem = item;
     },
     async onSubmit(values: any) {
-      const response = await createTask({ ...values });
-      if (response) {
-        this.openToast();
+      if (!this.isEdit) {
+        const response = await createTask({ ...values });
+        if (response) {
+          this.openToast("Task has been added successfully.");
+          this.ionRouter.back();
+        }
+      } else {
+        await updateTask(this.getTaskId, { ...values });
+        this.openToast("Task has been updated successfully.");
         this.ionRouter.back();
       }
     },
+    getTaskInfo(taskId) {
+      return new Promise((resolve) => {
+        const task: any = getTask(taskId);
+        if (task) {
+          resolve(task);
+        }
+      });
+    },
+  },
+  mounted() {
+    if (this.getTaskId) {
+      this.isEdit = true;
+      this.modalTopbarTitle = "Edit Task";
+      this.getTaskInfo(this.getTaskId)
+        .then((task: any) => {
+          this.taskName = task.name;
+          this.taskDescription = task.description;
+          this.taskDate = task.taskDate;
+          this.taskStartTime = task.startTime;
+          this.taskEndTime = task.endTime;
+          this.selectedBoardItem = task.board;
+          this.isChipSelected = task.board.value;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.openToast("Error fetching the data from the server.");
+        });
+    }
   },
 });
 </script>

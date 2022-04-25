@@ -37,15 +37,86 @@ ion-tab-button {
     &.tab-create-btn {
         --padding-start: 0;
         --padding-end: 0;
+        &::part(native) {
+            overflow: visible;
+            contain: none;
+        }
         ion-icon {
+            position: relative;
             width: 26px;
             height: 26px;
             opacity: 1;
             margin: 0;
+            z-index: 2;
             padding: 5px;
             border-radius: 50%;
             border: 2px solid $white;
             background-color: $secondary;
+            transition: 0.6s cubic-bezier(0.82, 0, 0.18, 0.9);
+        }
+        &.active {
+            ion-icon {
+                transform: rotate(225deg);
+            }
+            .c-menu {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+                &:after {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
+    }
+}
+
+.c-menu {
+    position: absolute;
+    bottom: 100%;
+    padding: 0;
+    width: 160px;
+    margin: 0 auto;
+    list-style: none;
+    padding: 5px 25px;
+    margin-bottom: 9px;
+    filter: url("#shadowed-goo");
+    border-radius: 25px;
+    background-color: $accent;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);
+    transition: 0.6s cubic-bezier(0.82, 0, 0.18, 0.9);
+    &:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: -1;
+        width: 58px;
+        height: 58px;
+        opacity: 0;
+        margin: 12px auto 0;
+        border-radius: 100%;
+        background-color: inherit;
+        transform: translateY(-40px);
+        transition: 0.6s 0.1s cubic-bezier(0.82, 0, 0.18, 0.9);
+    }
+    &__item {
+        & + .c-menu__item {
+            border-top: 1px solid rgba($white, 0.4);
+        }
+    }
+    &__link {
+        opacity: 0.5;
+        color: $white;
+        padding: 8px 0;
+        display: inline-flex;
+        text-decoration: none;
+        font-size: $font-size-base * 0.85;
+        &.router-link-active {
+            opacity: 1;
         }
     }
 }

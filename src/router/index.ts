@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
+import AddNewTask from "../views/AddNewTask.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,7 +36,11 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/tabs/task/add',
-    component: () => import('@/views/AddNewTask.vue')
+    component: AddNewTask
+  },
+  {
+    path: '/tabs/task/edit/:id',
+    component: AddNewTask
   },
 ]
 
