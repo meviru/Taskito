@@ -1,5 +1,7 @@
 <template>
-  <div class="c-empty-states text-center">
+  <div
+    class="c-empty-states d-flex flex-column justify-content-center text-center"
+  >
     <img
       class="c-empty-states__img"
       :src="require(`@/assets/images/${emptyStateImg}`)"

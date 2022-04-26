@@ -37,3 +37,12 @@ export const useLoadTasks = () => {
     onUnmounted(close);
     return tasks;
 }
+
+export const filterByDate = (date) => {
+    let filteredTask = ref([]);
+    const close = tasksCollection.where("taskDate", "==", date).onSnapshot(snapshot => {
+        filteredTask.value = snapshot.docs.map(task => ({ id: task.id, ...task.data() }));
+    })
+    onUnmounted(close);
+    return filteredTask;
+}

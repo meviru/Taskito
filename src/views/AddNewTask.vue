@@ -228,6 +228,7 @@ import {
   IonDatetime,
   pickerController,
   toastController,
+  loadingController,
 } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import {
@@ -323,6 +324,7 @@ export default defineComponent({
       isChipSelected: undefined as any,
       selectedBoardItem: {} as any,
       isEdit: false,
+      isLoading: undefined as any,
     };
   },
   computed: {
@@ -391,20 +393,32 @@ export default defineComponent({
       this.isChipSelected = index;
       this.selectedBoardItem = item;
     },
+    async presentLoading() {
+      this.isLoading = await loadingController.create({
+        cssClass: "c-loader",
+        message: "Please wait...",
+      });
+
+      await this.isLoading.present();
+    },
     async onSubmit(values: any) {
+      this.presentLoading();
       if (!this.isEdit) {
         const response = await createTask({ ...values });
         if (response) {
+          this.isLoading.dismiss();
           this.openToast("Task has been added successfully.");
           this.ionRouter.back();
         }
       } else {
         await updateTask(this.getTaskId, { ...values });
+        this.isLoading.dismiss();
         this.openToast("Task has been updated successfully.");
         this.ionRouter.back();
       }
     },
     getTaskInfo(taskId) {
+      this.presentLoading();
       return new Promise((resolve) => {
         const task: any = getTask(taskId);
         if (task) {
@@ -419,6 +433,7 @@ export default defineComponent({
       this.modalTopbarTitle = "Edit Task";
       this.getTaskInfo(this.getTaskId)
         .then((task: any) => {
+          this.isLoading.dismiss();
           this.taskName = task.name;
           this.taskDescription = task.description;
           this.taskDate = task.taskDate;

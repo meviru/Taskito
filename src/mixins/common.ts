@@ -33,7 +33,7 @@ const CommonMixin = {
                 const fullDate = new Date(date.setDate(first)).toISOString().slice(0, 10);
                 const day = fullDate.slice(8, 10)
                 const dayName = i == 7 ? weekday[0] : weekday[i];
-                week.push({ "day": day, "weekday": dayName });
+                week.push({ "day": day, "weekday": dayName, "fulldate": fullDate });
             }
             return week;
         },

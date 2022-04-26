@@ -38,10 +38,13 @@
             v-for="(week, index) in daysOfTheWeek()"
             :key="index"
             class="d-flex flex-column align-items-center c-current-week__item"
-            :class="{ active: isToday(week.day) }"
+            :class="{
+              active: selectedDate == index,
+            }"
+            @click="filterTaskByDate(week.fulldate, index)"
           >
             <span class="text-muted">{{ shortWeekday(week.weekday) }}</span>
-            <strong :class="{ 'text-primary': isToday(week.day) }">{{
+            <strong :class="{ 'text-primary': selectedDate == index }">{{
               week.day
             }}</strong>
           </li>
@@ -78,7 +81,8 @@ import Topbar from "@/components/topbar/Topbar.vue";
 import Card from "@/components/card/Card.vue";
 import EmptyState from "@/components/empty-state/EmptyState.vue";
 import CommonMixin from "@/mixins/common";
-import { useLoadTasks } from "@/firebase";
+import { filterByDate } from "@/firebase";
+import { format, parseISO } from "date-fns";
 export default defineComponent({
   name: Constants.NAME.TASK_TAB,
   components: { IonContent, IonPage, Topbar, Card, EmptyState },
@@ -94,6 +98,7 @@ export default defineComponent({
     return {
       tasksList: [] as any,
       totalTasks: 0,
+      selectedDate: 0,
     };
   },
   watch: {
@@ -105,14 +110,19 @@ export default defineComponent({
     },
   },
   methods: {
-    isToday(day: any) {
-      const date = new Date();
-      return day == date.getDate() ? true : false;
+    filterTaskByDate(day, index) {
+      this.selectedDate = index;
+      const date = new Date(day).toISOString();
+      const finalDate = format(parseISO(date), "MMM dd, yyyy");
+      this.tasksList = filterByDate(finalDate);
     },
   },
   created() {
-    const tasksListData = useLoadTasks();
-    this.tasksList = tasksListData;
+    const date = new Date();
+    this.daysOfTheWeek().forEach((day, index) => {
+      if (day.day == date.getDate()) this.selectedDate = index;
+    });
+    this.filterTaskByDate(date, this.selectedDate);
   },
 });
 </script>
