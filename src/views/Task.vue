@@ -58,6 +58,7 @@
               :card-description="item.description"
               :card-timings="item.startTime + ` - ` + item.endTime"
               :card-persons="2"
+              @present-action-sheet="onPresentActionSheet(item.name, item.id)"
             />
           </template>
         </div>
@@ -74,7 +75,14 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
+import {
+  IonPage,
+  IonContent,
+  useIonRouter,
+  toastController,
+  actionSheetController,
+  alertController,
+} from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import { addOutline } from "ionicons/icons";
 import Topbar from "@/components/topbar/Topbar.vue";
@@ -83,6 +91,8 @@ import EmptyState from "@/components/empty-state/EmptyState.vue";
 import CommonMixin from "@/mixins/common";
 import { filterByDate } from "@/firebase";
 import { format, parseISO } from "date-fns";
+import { deleteTask } from "@/firebase";
+
 export default defineComponent({
   name: Constants.NAME.TASK_TAB,
   components: { IonContent, IonPage, Topbar, Card, EmptyState },
@@ -99,6 +109,7 @@ export default defineComponent({
       tasksList: [] as any,
       totalTasks: 0,
       selectedDate: 0,
+      ionRouter: useIonRouter(),
     };
   },
   watch: {
@@ -115,6 +126,70 @@ export default defineComponent({
       const date = new Date(day).toISOString();
       const finalDate = format(parseISO(date), "MMM dd, yyyy");
       this.tasksList = filterByDate(finalDate);
+    },
+    async openToast() {
+      const toast = await toastController.create({
+        mode: "ios",
+        cssClass: "c-toaster",
+        position: "top",
+        message: "Task has been deleted successfully.",
+        duration: 2000,
+      });
+      return toast.present();
+    },
+    async onPresentActionSheet(cardTitle, id) {
+      const actionSheet = await actionSheetController.create({
+        header: cardTitle,
+        cssClass: "c-action-sheet",
+        buttons: [
+          {
+            text: "Delete",
+            cssClass: "action-sheet-button__delete",
+            handler: () => {
+              this.presentAlertConfirm(id);
+            },
+          },
+          {
+            text: "Edit",
+            cssClass: "action-sheet-button__edit",
+            handler: () => {
+              // console.log("Edit clicked");
+              this.ionRouter.push(`/tabs/task/edit/${id}`);
+            },
+          },
+          {
+            text: "Cancel",
+            cssClass: "action-sheet-button__cancel",
+            handler: () => {
+              console.log("Cancel clicked");
+            },
+          },
+        ],
+      });
+      await actionSheet.present();
+    },
+    async presentAlertConfirm(id) {
+      const alert = await alertController.create({
+        cssClass: "c-alert-box",
+        header: "Are you sure?",
+        message:
+          "Do you really want to delete this task? This process cannot be undone.",
+        buttons: [
+          {
+            text: "Cancel",
+            cssClass: "alert-button__cancel",
+          },
+          {
+            text: "Delete",
+            cssClass: "alert-button__delete",
+            handler: () => {
+              deleteTask(id);
+              this.openToast();
+            },
+          },
+        ],
+      });
+      return alert.present();
     },
   },
   created() {

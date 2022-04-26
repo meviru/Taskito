@@ -383,7 +383,7 @@ export default defineComponent({
       const toast = await toastController.create({
         mode: "ios",
         cssClass: "c-toaster",
-        position: "bottom",
+        position: "top",
         message: toastMessage,
         duration: 2000,
       });
