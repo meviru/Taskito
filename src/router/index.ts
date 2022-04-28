@@ -2,11 +2,13 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
 import AddNewTask from "../views/AddNewTask.vue";
+import SignIn from "../views/SignIn.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/dashboard'
+    redirect: '/sign-in',
+    component: SignIn, name: "sign-in"
   },
   {
     path: '/tabs/',

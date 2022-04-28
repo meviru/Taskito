@@ -1,6 +1,4 @@
-.text-muted {
-    color: $gray !important;
-}
+/*-- text utilities --*/
 .text-left {
     text-align: left !important;
 }
@@ -9,6 +7,43 @@
 }
 .text-center {
     text-align: center !important;
+}
+@media (min-width: 768px) {
+    .text-sm-left {
+        text-align: left !important;
+    }
+    .text-sm-right {
+        text-align: right !important;
+    }
+    .text-sm-center {
+        text-align: center !important;
+    }
+}
+@media (min-width: 992px) {
+    .text-md-left {
+        text-align: left !important;
+    }
+    .text-md-right {
+        text-align: right !important;
+    }
+    .text-md-center {
+        text-align: center !important;
+    }
+}
+@media (min-width: 1200px) {
+    .text-lg-left {
+        text-align: left !important;
+    }
+    .text-lg-right {
+        text-align: right !important;
+    }
+    .text-lg-center {
+        text-align: center !important;
+    }
+}
+
+.text-muted {
+    color: $gray !important;
 }
 
 @each $color, $value in $theme-colors {
