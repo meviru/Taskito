@@ -2,13 +2,16 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
 import AddNewTask from "../views/AddNewTask.vue";
-import SignIn from "../views/SignIn.vue";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '',
     redirect: '/sign-in',
-    component: SignIn, name: "sign-in"
+  },
+  {
+    path: '/sign-in',
+    component: () => import('@/views/SignIn.vue')
   },
   {
     path: '/tabs/',
@@ -44,11 +47,40 @@ const routes: Array<RouteRecordRaw> = [
     path: '/tabs/task/edit/:id',
     component: AddNewTask
   },
+  {
+    path: '/profile/',
+    component: () => import('@/views/Profile.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
+
+// const getCurrentUser = () => {
+//   return new Promise((resolve, reject) => {
+//     const removeListner = onAuthStateChanged(getAuth(), (user) => {
+//       removeListner();
+//       resolve(user);
+//     }, reject)
+//   })
+// }
+
+// router.beforeEach(async (to, from, next) => {
+//   const requiresAuth = !to.matched.some((record) => { record.meta.requiresAuth });
+//   if (requiresAuth) {
+//     if (await getCurrentUser()) {
+//       next();
+//     } else {
+//       next("/");
+//     }
+//   } else {
+//     next();
+//   }
+// });
 
 export default router

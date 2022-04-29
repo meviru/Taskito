@@ -13,6 +13,8 @@
   @each $color, $value in $theme-colors {
     &.ion-color-#{$color} {
       --ion-color-base: #{$value} !important;
+      --ion-color-tint: #{$value} !important;
+      --ion-color-shade: #{$value} !important;
       &::part(native) {
         color: $white;
         background: $value;

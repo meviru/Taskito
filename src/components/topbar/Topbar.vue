@@ -5,9 +5,11 @@
     mode="md"
   >
     <ion-title>{{ toolbarTitle }}</ion-title>
-    <ion-avatar slot="end">
-      <img src="@/assets/images/user.jpg" alt="User" />
-    </ion-avatar>
+    <router-link slot="end" to="/profile">
+      <ion-avatar>
+        <img src="@/assets/images/user.jpg" alt="User" />
+      </ion-avatar>
+    </router-link>
   </ion-toolbar>
 </template>
 

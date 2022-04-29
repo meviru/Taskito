@@ -17,6 +17,6 @@
     }
 }
 
-@mixin card-shadow($top, $left) {
-    box-shadow: $top $left 15px -8px rgba($primary, 0.3);
+@mixin card-shadow($top, $left, $color: $primary) {
+    box-shadow: $top $left 15px -8px rgba($color, 0.3);
 }
