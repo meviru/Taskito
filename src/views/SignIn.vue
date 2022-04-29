@@ -66,7 +66,7 @@ export default defineComponent({
       signInWithPopup(getAuth(), provider)
         .then((result) => {
           store.dispatch("setUserDetail", result.user);
-          this.ionRouter.push("/tabs");
+          this.ionRouter.push("/tabs/dashboard");
         })
         .catch((error) => {
           this.openToast("Something went wrong! Please try again.");

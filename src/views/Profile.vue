@@ -20,7 +20,7 @@ import { IonPage, IonContent, useIonRouter } from "@ionic/vue";
 import { Constants } from "@/constants/index";
 import ModalTopbar from "@/components/modal-topbar/ModalTopbar.vue";
 import store from "@/store/index";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 export default defineComponent({
   name: Constants.NAME.SIGN_IN,
   components: { IonContent, IonPage, ModalTopbar },
@@ -28,28 +28,30 @@ export default defineComponent({
     return {
       modalTopbarTitle: "Profile",
       ionRouter: useIonRouter(),
-      auth: getAuth(),
-      isLoggedIn: false,
     };
+  },
+  computed: {
+    getUserDetail() {
+      return store.getters.getUserDetail;
+    },
   },
   methods: {
     closeModal() {
       this.ionRouter.back();
     },
     logoutUser() {
-      signOut(this.auth).then(() => {
-        this.ionRouter.push("/");
-      });
+      const auth = getAuth();
+      signOut(auth)
+        .then(() => {
+          this.ionRouter.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   mounted() {
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        this.isLoggedIn = true;
-      } else {
-        this.isLoggedIn = false;
-      }
-    });
+    console.log(this.getUserDetail);
   },
 });
 </script>

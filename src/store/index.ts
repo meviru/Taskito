@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 // Create Vuex data store
 const store = new Vuex.Store({
     state: {
-        userDetail: {} as any,
+        userDetail: null,
     },
     mutations: {
         SET_USER_DETAIL(state, value) {

@@ -11,11 +11,17 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/sign-in',
-    component: () => import('@/views/SignIn.vue')
+    component: () => import('@/views/SignIn.vue'),
+    meta: {
+      requiresAuth: false
+    }
   },
   {
     path: '/tabs/',
     component: TabsPage,
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: '',
@@ -23,6 +29,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'dashboard',
+        name: "dashboard",
         component: () => import('@/views/Dashboard.vue')
       },
       {
@@ -41,11 +48,17 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/tabs/task/add',
-    component: AddNewTask
+    component: AddNewTask,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/tabs/task/edit/:id',
-    component: AddNewTask
+    component: AddNewTask,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: '/profile/',
@@ -61,26 +74,25 @@ const router = createRouter({
   routes
 });
 
-// const getCurrentUser = () => {
-//   return new Promise((resolve, reject) => {
-//     const removeListner = onAuthStateChanged(getAuth(), (user) => {
-//       removeListner();
-//       resolve(user);
-//     }, reject)
-//   })
-// }
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const removeListner = onAuthStateChanged(getAuth(), (user) => {
+      removeListner();
+      resolve(user);
+    }, reject)
+  })
+}
 
-// router.beforeEach(async (to, from, next) => {
-//   const requiresAuth = !to.matched.some((record) => { record.meta.requiresAuth });
-//   if (requiresAuth) {
-//     if (await getCurrentUser()) {
-//       next();
-//     } else {
-//       next("/");
-//     }
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach(async (to, from, next) => {
+  if (to.meta.requiresAuth) {
+    if (await getCurrentUser()) {
+      next();
+    } else {
+      next("/");
+    }
+  } else {
+    next();
+  }
+});
 
 export default router
